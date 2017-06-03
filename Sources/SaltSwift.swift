@@ -58,9 +58,76 @@ class SaltSwift {
 
 extension SaltSwift {
     
-    static func validPassword(_ password : String) -> Bool {
+    enum passOptions {
+        case digits(Int)
+        case containsCapitol
+        case containsNumbers
+        case containsPunctuations
+        case containsLowerCase
+        case regex(String)
+    }
+    
+    enum passError : Error {
+        case smallPassword
+        case needsCapitol
+        case needsNumbers
+        case needsLowerCase
+        case needsPunctuations
+        case doesNotConformToRegex
+    }
+    
+    static func validPassword(_ password : String, options : [passOptions]) throws -> Bool {
+        
+        for option in options {
+            switch option {
+            case .containsCapitol :
+                if !password.isMatching(expression: ".*[A-Z]+.*")
+                { throw passError.needsCapitol }
+            case .containsNumbers:
+                if !password.isMatching(expression: ".*[0-9]+.*")
+                { throw passError.needsNumbers }
+            case .containsPunctuations:
+                if !password.isMatching(expression: ".*[!&^%$#@()/]+.*")
+                { throw passError.needsPunctuations }
+            case .containsLowerCase:
+                if !password.isMatching(expression: ".*[a-z]+.*")
+                { throw passError.needsLowerCase }
+            case .regex(let regex):
+                if !password.isMatching(expression: regex)
+                { throw passError.doesNotConformToRegex }
+            case .digits(let digits):
+                if (password.characters.count < digits)
+                { throw passError.smallPassword }
+            }
+        }
+        
+        return true
         
     }
     
     
 }
+
+extension String {
+    
+    func isMatching(expression: String, count : Int = 1) -> Bool {
+        let regex = try! NSRegularExpression(pattern: expression)
+        return regex.numberOfMatches(in: self, range: NSRange(location: 0, length: characters.count)) > (count - 1)
+    }
+    
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
