@@ -1,12 +1,12 @@
 import CryptoSwift
 import Foundation
 
-class SaltSwift {
+public class SaltSwift {
     
     var saltedPass : String
     var salt : String
     
-    static var generateSalt : String {
+    public static var generateSalt : String {
         return UUID().uuidString
     }
     
@@ -110,7 +110,7 @@ extension SaltSwift {
 
 extension String {
     
-    func isMatching(expression: String, count : Int = 1) -> Bool {
+    public func isMatching(expression: String, count : Int = 1) -> Bool {
         let regex = try! NSRegularExpression(pattern: expression)
         return regex.numberOfMatches(in: self, range: NSRange(location: 0, length: characters.count)) > (count - 1)
     }
