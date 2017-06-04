@@ -37,7 +37,6 @@ class SaltSwiftTests: XCTestCase {
         
         let goodPassword = "fdsfshSADFSDF@#$122"
         XCTAssert(try SaltSwift.validPassword(goodPassword, options: [.containsCapitol, .containsNumbers, .containsPunctuations, .digits(6)]))
-        
     }
 
     static var allTests = [
