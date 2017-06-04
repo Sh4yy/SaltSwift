@@ -10,7 +10,7 @@ class SaltSwift {
         return UUID().uuidString
     }
     
-    enum Algorithms {
+    public enum Algorithms {
         case MD5
         case SHA1
         case SHA256
@@ -27,7 +27,7 @@ class SaltSwift {
         
     }
 
-    static func salt(password : String, salt : String? = nil, algorithm : Algorithms)
+    public static func salt(password : String, salt : String? = nil, algorithm : Algorithms)
             -> (saltedPass : String, salt : String) {
             let salt = salt ?? generateSalt
             let combination = password + salt
@@ -39,17 +39,17 @@ class SaltSwift {
             return (hashedString, salt)
     }
     
-    init(saltedPass : String, salt : String) {
+    public init(saltedPass : String, salt : String) {
         self.salt = salt
         self.saltedPass = saltedPass
     }
     
-    convenience init(pass : String)  {
+    public convenience init(pass : String)  {
         let result =  SaltSwift.salt(password: pass, algorithm: .SHA256)
         self.init(saltedPass: result.saltedPass, salt: result.salt)
     }
     
-    func match(_ password : String, algorithm : Algorithms = .SHA256)  -> Bool {
+    public func match(_ password : String, algorithm : Algorithms = .SHA256)  -> Bool {
         let newSaltedPass =  SaltSwift.salt(password: password, salt: salt, algorithm: algorithm).saltedPass
         return newSaltedPass == saltedPass
     }
@@ -58,7 +58,7 @@ class SaltSwift {
 
 extension SaltSwift {
     
-    enum passOptions {
+    public enum passOptions {
         case digits(Int)
         case containsCapitol
         case containsNumbers
@@ -67,7 +67,7 @@ extension SaltSwift {
         case regex(String)
     }
     
-    enum passError : Error {
+    public enum passError : Error {
         case smallPassword
         case needsCapitol
         case needsNumbers
@@ -76,7 +76,7 @@ extension SaltSwift {
         case doesNotConformToRegex
     }
     
-    static func validPassword(_ password : String, options : [passOptions]) throws -> Bool {
+    public static func validPassword(_ password : String, options : [passOptions]) throws -> Bool {
         
         for option in options {
             switch option {
