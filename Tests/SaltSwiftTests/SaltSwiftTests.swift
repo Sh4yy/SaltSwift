@@ -3,6 +3,7 @@ import XCTest
 
 class SaltSwiftTests: XCTestCase {
    
+    //
     func testExample() {
         let password = "thisIsARandomPass"
         
